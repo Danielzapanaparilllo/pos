@@ -131,10 +131,9 @@ interface ConnectionInterface
      * Escapes data based on type.
      * Sets boolean and null types.
      *
-     * @param array|bool|float|int|object|string|null $str
+     * @param mixed $str
      *
-     * @return array|float|int|string
-     * @phpstan-return ($str is array ? array : float|int|string)
+     * @return mixed
      */
     public function escape($str);
 

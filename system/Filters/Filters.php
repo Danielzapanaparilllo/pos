@@ -143,20 +143,20 @@ class Filters
     }
 
     /**
-     * Set the response explicitly.
+     * Set the response explicity.
      */
     public function setResponse(ResponseInterface $response)
     {
-        $this->response = $response;
+        $this->response = &$response;
     }
 
     /**
      * Runs through all of the filters for the specified
      * uri and position.
      *
-     * @return mixed|RequestInterface|ResponseInterface
-     *
      * @throws FilterException
+     *
+     * @return mixed|RequestInterface|ResponseInterface
      */
     public function run(string $uri, string $position = 'before')
     {

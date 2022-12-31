@@ -47,7 +47,7 @@ class CodeIgniter
     /**
      * The current version of CodeIgniter Framework
      */
-    public const CI_VERSION = '4.2.10';
+    public const CI_VERSION = '4.2.6';
 
     /**
      * App startup time.
@@ -150,11 +150,6 @@ class CodeIgniter
      * @phpstan-var 'php-cli'|'spark'|'web'
      */
     protected ?string $context = null;
-
-    /**
-     * Whether to return Response object or send response.
-     */
-    protected bool $returnResponse = false;
 
     /**
      * Constructor.
@@ -290,14 +285,12 @@ class CodeIgniter
      * tries to route the response, loads the controller and generally
      * makes all of the pieces work together.
      *
-     * @return ResponseInterface|void
-     *
      * @throws RedirectException
+     *
+     * @return ResponseInterface|void
      */
     public function run(?RouteCollectionInterface $routes = null, bool $returnResponse = false)
     {
-        $this->returnResponse = $returnResponse;
-
         if ($this->context === null) {
             throw new LogicException('Context must be set before run() is called. If you are upgrading from 4.1.x, you need to merge `public/index.php` and `spark` file from `vendor/codeigniter4/framework`.');
         }
@@ -315,10 +308,6 @@ class CodeIgniter
 
         if ($this->request instanceof IncomingRequest && strtolower($this->request->getMethod()) === 'cli') {
             $this->response->setStatusCode(405)->setBody('Method Not Allowed');
-
-            if ($this->returnResponse) {
-                return $this->response;
-            }
 
             $this->sendResponse();
 
@@ -356,22 +345,13 @@ class CodeIgniter
             // If the route is a 'redirect' route, it throws
             // the exception with the $to as the message
             $this->response->redirect(base_url($e->getMessage()), 'auto', $e->getCode());
-
-            if ($this->returnResponse) {
-                return $this->response;
-            }
-
             $this->sendResponse();
 
             $this->callExit(EXIT_SUCCESS);
 
             return;
         } catch (PageNotFoundException $e) {
-            $return = $this->display404errors($e);
-
-            if ($return instanceof ResponseInterface) {
-                return $return;
-            }
+            $this->display404errors($e);
         }
     }
 
@@ -416,17 +396,13 @@ class CodeIgniter
     /**
      * Handles the main request logic and fires the controller.
      *
-     * @return ResponseInterface
-     *
      * @throws PageNotFoundException
      * @throws RedirectException
      *
-     * @deprecated $returnResponse is deprecated.
+     * @return ResponseInterface
      */
     protected function handleRequest(?RouteCollectionInterface $routes, Cache $cacheConfig, bool $returnResponse = false)
     {
-        $this->returnResponse = $returnResponse;
-
         $routeFilter = $this->tryToRouteIt($routes);
 
         $uri = $this->determinePath();
@@ -457,8 +433,7 @@ class CodeIgniter
 
             // If a ResponseInterface instance is returned then send it back to the client and stop
             if ($possibleResponse instanceof ResponseInterface) {
-                return $this->returnResponse ? $possibleResponse
-                    : $possibleResponse->pretend($this->useSafeOutput)->send();
+                return $returnResponse ? $possibleResponse : $possibleResponse->pretend($this->useSafeOutput)->send();
             }
 
             if ($possibleResponse instanceof Request) {
@@ -537,7 +512,7 @@ class CodeIgniter
 
         unset($uri);
 
-        if (! $this->returnResponse) {
+        if (! $returnResponse) {
             $this->sendResponse();
         }
 
@@ -674,9 +649,9 @@ class CodeIgniter
     /**
      * Determines if a response has been cached for the given URI.
      *
-     * @return false|ResponseInterface
-     *
      * @throws Exception
+     *
+     * @return false|ResponseInterface
      */
     public function displayCache(Cache $config)
     {
@@ -754,13 +729,18 @@ class CodeIgniter
             return md5($this->request->getPath());
         }
 
-        $uri = clone $this->request->getUri();
+        $uri = $this->request->getUri();
+        if ($config->cacheQueryString) {
+            if (is_array($config->cacheQueryString)) {
+                $name = URI::createURIString($uri->getScheme(), $uri->getAuthority(), $uri->getPath(), $uri->getQuery(['only' => $config->cacheQueryString]));
+            } else {
+                $name = URI::createURIString($uri->getScheme(), $uri->getAuthority(), $uri->getPath(), $uri->getQuery());
+            }
+        } else {
+            $name = URI::createURIString($uri->getScheme(), $uri->getAuthority(), $uri->getPath());
+        }
 
-        $query = $config->cacheQueryString
-            ? $uri->getQuery(is_array($config->cacheQueryString) ? ['only' => $config->cacheQueryString] : [])
-            : '';
-
-        return md5($uri->setFragment('')->setQuery($query));
+        return md5($name);
     }
 
     /**
@@ -779,9 +759,9 @@ class CodeIgniter
      * @param RouteCollectionInterface|null $routes An collection interface to use in place
      *                                              of the config file.
      *
-     * @return string|string[]|null Route filters, that is, the filters specified in the routes file
-     *
      * @throws RedirectException
+     *
+     * @return string|string[]|null Route filters, that is, the filters specified in the routes file
      */
     protected function tryToRouteIt(?RouteCollectionInterface $routes = null)
     {
@@ -935,8 +915,6 @@ class CodeIgniter
     /**
      * Displays a 404 Page Not Found error. If set, will try to
      * call the 404Override controller/method that was set in routing config.
-     *
-     * @return ResponseInterface|void
      */
     protected function display404errors(PageNotFoundException $e)
     {
@@ -961,10 +939,6 @@ class CodeIgniter
 
             $cacheConfig = new Cache();
             $this->gatherOutput($cacheConfig, $returned);
-            if ($this->returnResponse) {
-                return $this->response;
-            }
-
             $this->sendResponse();
 
             return;

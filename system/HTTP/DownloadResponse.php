@@ -279,9 +279,9 @@ class DownloadResponse extends Response
     /**
      * output download file text.
      *
-     * @return DownloadResponse
-     *
      * @throws DownloadException
+     *
+     * @return DownloadResponse
      */
     public function sendBody()
     {

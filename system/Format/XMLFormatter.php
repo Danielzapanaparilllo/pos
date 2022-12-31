@@ -25,7 +25,7 @@ class XMLFormatter implements FormatterInterface
      *
      * @param mixed $data
      *
-     * @return false|string (XML string | false)
+     * @return bool|string (XML string | false)
      */
     public function format($data)
     {
@@ -34,7 +34,10 @@ class XMLFormatter implements FormatterInterface
         // SimpleXML is installed but default
         // but best to check, and then provide a fallback.
         if (! extension_loaded('simplexml')) {
-            throw FormatException::forMissingExtension(); // @codeCoverageIgnore
+            // never thrown in travis-ci
+            // @codeCoverageIgnoreStart
+            throw FormatException::forMissingExtension();
+            // @codeCoverageIgnoreEnd
         }
 
         $options = $config->formatterOptions['application/xml'] ?? 0;

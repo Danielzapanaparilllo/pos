@@ -159,9 +159,9 @@ class Cookie implements ArrayAccess, CloneableCookieInterface
     /**
      * Create a new Cookie instance from a `Set-Cookie` header.
      *
-     * @return static
-     *
      * @throws CookieException
+     *
+     * @return static
      */
     public static function fromHeaderString(string $cookie, bool $raw = false)
     {
@@ -575,9 +575,9 @@ class Cookie implements ArrayAccess, CloneableCookieInterface
      *
      * @param mixed $offset
      *
-     * @return mixed
-     *
      * @throws InvalidArgumentException
+     *
+     * @return mixed
      */
     #[ReturnTypeWillChange]
     public function offsetGet($offset)

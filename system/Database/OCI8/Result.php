@@ -12,12 +12,13 @@
 namespace CodeIgniter\Database\OCI8;
 
 use CodeIgniter\Database\BaseResult;
+use CodeIgniter\Database\ResultInterface;
 use CodeIgniter\Entity\Entity;
 
 /**
  * Result for OCI8
  */
-class Result extends BaseResult
+class Result extends BaseResult implements ResultInterface
 {
     /**
      * Gets the number of fields in the result set.

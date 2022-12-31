@@ -24,7 +24,7 @@ class App extends BaseConfig
      *
      * @var string
      */
-    public $baseURL = 'http://localhost/pos/public/';
+    public $baseURL = '';
 
     /**
      * --------------------------------------------------------------------------
@@ -37,7 +37,7 @@ class App extends BaseConfig
      *
      * @var string
      */
-    public $indexPage = 'index.php';
+    public $indexPage = '';
 
     /**
      * --------------------------------------------------------------------------
@@ -70,7 +70,7 @@ class App extends BaseConfig
      *
      * @var string
      */
-    public $defaultLocale = 'en';
+    public $defaultLocale = 'es';
 
     /**
      * --------------------------------------------------------------------------
@@ -109,7 +109,7 @@ class App extends BaseConfig
      *
      * @var string
      */
-    public $appTimezone = 'America/Chicago';
+    public $appTimezone = 'America/Mexico_City';
 
     /**
      * --------------------------------------------------------------------------
@@ -356,7 +356,7 @@ class App extends BaseConfig
      *
      * @var string
      */
-    public $CSRFTokenName = 'csrf_test_name';
+    public $CSRFTokenName = 'app_csrf';
 
     /**
      * --------------------------------------------------------------------------

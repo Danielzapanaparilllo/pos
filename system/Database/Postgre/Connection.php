@@ -169,10 +169,9 @@ class Connection extends BaseConnection
      *
      * Escapes data based on type
      *
-     * @param array|bool|float|int|object|string|null $str
+     * @param mixed $str
      *
-     * @return array|float|int|string
-     * @phpstan-return ($str is array ? array : float|int|string)
+     * @return mixed
      */
     public function escape($str)
     {
@@ -240,9 +239,9 @@ class Connection extends BaseConnection
     /**
      * Returns an array of objects with field data
      *
-     * @return stdClass[]
-     *
      * @throws DatabaseException
+     *
+     * @return stdClass[]
      */
     protected function _fieldData(string $table): array
     {
@@ -275,9 +274,9 @@ class Connection extends BaseConnection
     /**
      * Returns an array of objects with index data
      *
-     * @return stdClass[]
-     *
      * @throws DatabaseException
+     *
+     * @return stdClass[]
      */
     protected function _indexData(string $table): array
     {
@@ -314,9 +313,9 @@ class Connection extends BaseConnection
     /**
      * Returns an array of objects with Foreign key data
      *
-     * @return stdClass[]
-     *
      * @throws DatabaseException
+     *
+     * @return stdClass[]
      */
     protected function _foreignKeyData(string $table): array
     {

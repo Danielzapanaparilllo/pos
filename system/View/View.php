@@ -305,9 +305,8 @@ class View implements RendererInterface
     /**
      * Sets several pieces of view data at once.
      *
-     * @param string|null $context The context to escape it for: html, css, js, url
-     *                             If null, no escaping will happen
-     * @phpstan-param null|'html'|'js'|'css'|'url'|'attr'|'raw' $context
+     * @param string $context The context to escape it for: html, css, js, url
+     *                        If null, no escaping will happen
      */
     public function setData(array $data = [], ?string $context = null): RendererInterface
     {
@@ -327,7 +326,6 @@ class View implements RendererInterface
      * @param mixed       $value
      * @param string|null $context The context to escape it for: html, css, js, url
      *                             If null, no escaping will happen
-     * @phpstan-param null|'html'|'js'|'css'|'url'|'attr'|'raw' $context
      */
     public function setVar(string $name, $value = null, ?string $context = null): RendererInterface
     {

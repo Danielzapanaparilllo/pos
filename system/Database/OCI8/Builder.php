@@ -152,9 +152,9 @@ class Builder extends BaseBuilder
      *
      * @param mixed $where
      *
-     * @return mixed
-     *
      * @throws DatabaseException
+     *
+     * @return mixed
      */
     public function delete($where = '', ?int $limit = null, bool $resetData = true)
     {

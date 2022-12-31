@@ -28,8 +28,6 @@ use PHPUnit\Framework\TestCase;
  * @no-final
  *
  * @internal
- *
- * @mixin DOMParser
  */
 class TestResponse extends TestCase
 {
@@ -349,7 +347,7 @@ class TestResponse extends TestCase
     /**
      * Returns the response's body as JSON
      *
-     * @return false|string|null
+     * @return false|mixed
      */
     public function getJSON()
     {

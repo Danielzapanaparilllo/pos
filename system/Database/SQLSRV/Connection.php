@@ -96,9 +96,9 @@ class Connection extends BaseConnection
     /**
      * Connect to the database.
      *
-     * @return mixed
-     *
      * @throws DatabaseException
+     *
+     * @return mixed
      */
     public function connect(bool $persistent = false)
     {
@@ -141,7 +141,7 @@ class Connection extends BaseConnection
         $errors = [];
 
         foreach (sqlsrv_errors(SQLSRV_ERR_ERRORS) as $error) {
-            $errors[] = (string) preg_replace('/(\[.+\]\[.+\](?:\[.+\])?)(.+)/', '$2', $error['message']);
+            $errors[] = preg_replace('/(\[.+\]\[.+\](?:\[.+\])?)(.+)/', '$2', $error['message']);
         }
 
         throw new DatabaseException(implode("\n", $errors));
@@ -219,9 +219,9 @@ class Connection extends BaseConnection
     /**
      * Returns an array of objects with index data
      *
-     * @return stdClass[]
-     *
      * @throws DatabaseException
+     *
+     * @return stdClass[]
      */
     protected function _indexData(string $table): array
     {
@@ -257,9 +257,9 @@ class Connection extends BaseConnection
      * Returns an array of objects with Foreign key data
      * referenced_object_id  parent_object_id
      *
-     * @return stdClass[]
-     *
      * @throws DatabaseException
+     *
+     * @return stdClass[]
      */
     protected function _foreignKeyData(string $table): array
     {
@@ -325,9 +325,9 @@ class Connection extends BaseConnection
     /**
      * Returns an array of objects with field data
      *
-     * @return stdClass[]
-     *
      * @throws DatabaseException
+     *
+     * @return stdClass[]
      */
     protected function _fieldData(string $table): array
     {

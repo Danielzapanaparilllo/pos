@@ -13,11 +13,12 @@ namespace CodeIgniter\Database\OCI8;
 
 use BadMethodCallException;
 use CodeIgniter\Database\BasePreparedQuery;
+use CodeIgniter\Database\PreparedQueryInterface;
 
 /**
  * Prepared query for OCI8
  */
-class PreparedQuery extends BasePreparedQuery
+class PreparedQuery extends BasePreparedQuery implements PreparedQueryInterface
 {
     /**
      * A reference to the db connection to use.

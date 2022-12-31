@@ -137,8 +137,8 @@ if (! function_exists('form_input')) {
      * Text Input Field. If 'type' is passed in the $type field, it will be
      * used as the input type, for making 'email', 'phone', etc input fields.
      *
-     * @param array|string        $data
-     * @param array|object|string $extra string, array, object that can be cast to array
+     * @param mixed $data
+     * @param mixed $extra
      */
     function form_input($data = '', string $value = '', $extra = '', string $type = 'text'): string
     {
@@ -158,8 +158,8 @@ if (! function_exists('form_password')) {
      *
      * Identical to the input function but adds the "password" type
      *
-     * @param array|string        $data
-     * @param array|object|string $extra string, array, object that can be cast to array
+     * @param mixed $data
+     * @param mixed $extra
      */
     function form_password($data = '', string $value = '', $extra = ''): string
     {
@@ -178,8 +178,8 @@ if (! function_exists('form_upload')) {
      *
      * Identical to the input function but adds the "file" type
      *
-     * @param array|string        $data
-     * @param array|object|string $extra string, array, object that can be cast to array
+     * @param mixed $data
+     * @param mixed $extra
      */
     function form_upload($data = '', string $value = '', $extra = ''): string
     {
@@ -202,8 +202,8 @@ if (! function_exists('form_textarea')) {
     /**
      * Textarea field
      *
-     * @param array|string        $data
-     * @param array|object|string $extra string, array, object that can be cast to array
+     * @param mixed $data
+     * @param mixed $extra
      */
     function form_textarea($data = '', string $value = '', $extra = ''): string
     {
@@ -238,8 +238,8 @@ if (! function_exists('form_multiselect')) {
     /**
      * Multi-select menu
      *
-     * @param array|string        $name
-     * @param array|object|string $extra string, array, object that can be cast to array
+     * @param mixed $name
+     * @param mixed $extra
      */
     function form_multiselect($name = '', array $options = [], array $selected = [], $extra = ''): string
     {
@@ -257,10 +257,10 @@ if (! function_exists('form_dropdown')) {
     /**
      * Drop-down Menu
      *
-     * @param array|string        $data
-     * @param array|string        $options
-     * @param array|string        $selected
-     * @param array|object|string $extra    string, array, object that can be cast to array
+     * @param mixed $data
+     * @param mixed $options
+     * @param mixed $selected
+     * @param mixed $extra
      */
     function form_dropdown($data = '', $options = [], $selected = [], $extra = ''): string
     {
@@ -340,8 +340,8 @@ if (! function_exists('form_checkbox')) {
     /**
      * Checkbox Field
      *
-     * @param array|string        $data
-     * @param array|object|string $extra string, array, object that can be cast to array
+     * @param mixed $data
+     * @param mixed $extra
      */
     function form_checkbox($data = '', string $value = '', bool $checked = false, $extra = ''): string
     {
@@ -353,7 +353,6 @@ if (! function_exists('form_checkbox')) {
 
         if (is_array($data) && array_key_exists('checked', $data)) {
             $checked = $data['checked'];
-
             if ($checked === false) {
                 unset($data['checked']);
             } else {
@@ -363,6 +362,8 @@ if (! function_exists('form_checkbox')) {
 
         if ($checked === true) {
             $defaults['checked'] = 'checked';
+        } elseif (isset($defaults['checked'])) {
+            unset($defaults['checked']);
         }
 
         return '<input ' . parse_form_attributes($data, $defaults) . stringify_attributes($extra) . " />\n";
@@ -373,8 +374,8 @@ if (! function_exists('form_radio')) {
     /**
      * Radio Button
      *
-     * @param array|string        $data
-     * @param array|object|string $extra string, array, object that can be cast to array
+     * @param mixed $data
+     * @param mixed $extra
      */
     function form_radio($data = '', string $value = '', bool $checked = false, $extra = ''): string
     {
@@ -391,8 +392,8 @@ if (! function_exists('form_submit')) {
     /**
      * Submit Button
      *
-     * @param array|string        $data
-     * @param array|object|string $extra string, array, object that can be cast to array
+     * @param mixed $data
+     * @param mixed $extra
      */
     function form_submit($data = '', string $value = '', $extra = ''): string
     {
@@ -404,8 +405,8 @@ if (! function_exists('form_reset')) {
     /**
      * Reset Button
      *
-     * @param array|string        $data
-     * @param array|object|string $extra string, array, object that can be cast to array
+     * @param mixed $data
+     * @param mixed $extra
      */
     function form_reset($data = '', string $value = '', $extra = ''): string
     {
@@ -417,8 +418,8 @@ if (! function_exists('form_button')) {
     /**
      * Form Button
      *
-     * @param array|string        $data
-     * @param array|object|string $extra string, array, object that can be cast to array
+     * @param mixed $data
+     * @param mixed $extra
      */
     function form_button($data = '', string $content = '', $extra = ''): string
     {
@@ -483,13 +484,13 @@ if (! function_exists('form_datalist')) {
 
         $out = form_input($data) . "\n";
 
-        $out .= "<datalist id='" . $name . "_list'>";
+        $out .= "<datalist id='" . $name . '_list' . "'>";
 
         foreach ($options as $option) {
-            $out .= "<option value='{$option}'>\n";
+            $out .= "<option value='{$option}'>" . "\n";
         }
 
-        return $out . ("</datalist>\n");
+        return $out . ('</datalist>' . "\n");
     }
 }
 

@@ -248,9 +248,9 @@ trait DatabaseTestTrait
      * Fetches a single column from a database row with criteria
      * matching $where.
      *
-     * @return bool
-     *
      * @throws DatabaseException
+     *
+     * @return bool
      */
     public function grabFromDatabase(string $table, string $column, array $where)
     {

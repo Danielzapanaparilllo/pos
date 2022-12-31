@@ -64,7 +64,6 @@ abstract class BaseModel
      * should be instantiated.
      *
      * @var string
-     * @phpstan-var non-empty-string
      */
     protected $DBGroup;
 
@@ -190,7 +189,7 @@ abstract class BaseModel
 
     /**
      * Whether rules should be removed that do not exist
-     * in the passed data. Used in updates.
+     * in the passed in data. Used between inserts/updates.
      *
      * @var bool
      */
@@ -327,9 +326,9 @@ abstract class BaseModel
      *
      * @param string $columnName Column Name
      *
-     * @return array|null The resulting row of data, or null if no data found.
-     *
      * @throws DataException
+     *
+     * @return array|null The resulting row of data, or null if no data found.
      */
     abstract protected function doFindColumn(string $columnName);
 
@@ -393,9 +392,9 @@ abstract class BaseModel
      * @param int         $batchSize The size of the batch to run
      * @param bool        $returnSQL True means SQL is returned, false will execute the query
      *
-     * @return mixed Number of rows affected or FALSE on failure
-     *
      * @throws DatabaseException
+     *
+     * @return mixed Number of rows affected or FALSE on failure
      */
     abstract protected function doUpdateBatch(?array $set = null, ?string $index = null, int $batchSize = 100, bool $returnSQL = false);
 
@@ -406,9 +405,9 @@ abstract class BaseModel
      * @param array|int|string|null $id    The rows primary key(s)
      * @param bool                  $purge Allows overriding the soft deletes setting.
      *
-     * @return bool|string
-     *
      * @throws DatabaseException
+     *
+     * @return bool|string
      */
     abstract protected function doDelete($id = null, bool $purge = false);
 
@@ -417,7 +416,7 @@ abstract class BaseModel
      * through soft deletes (deleted = 1)
      * This methods works only with dbCalls
      *
-     * @return bool|string Returns a string if in test mode.
+     * @return bool|mixed
      */
     abstract protected function doPurgeDeleted();
 
@@ -542,9 +541,9 @@ abstract class BaseModel
      *
      * @param string $columnName Column Name
      *
-     * @return array|null The resulting row of data, or null if no data found.
-     *
      * @throws DataException
+     *
+     * @return array|null The resulting row of data, or null if no data found.
      */
     public function findColumn(string $columnName)
     {
@@ -694,30 +693,20 @@ abstract class BaseModel
      * @param array|object|null $data     Data
      * @param bool              $returnID Whether insert ID should be returned or not.
      *
-     * @return bool|int|string insert ID or true on success. false on failure.
-     *
      * @throws ReflectionException
+     *
+     * @return bool|int|string insert ID or true on success. false on failure.
      */
     public function insert($data = null, bool $returnID = true)
     {
         $this->insertID = 0;
 
-        // Set $cleanValidationRules to false temporary.
-        $cleanValidationRules       = $this->cleanValidationRules;
-        $this->cleanValidationRules = false;
-
         $data = $this->transformDataToArray($data, 'insert');
 
         // Validate data before saving.
-        if (! $this->skipValidation && ! $this->validate($data)) {
-            // Restore $cleanValidationRules
-            $this->cleanValidationRules = $cleanValidationRules;
-
+        if (! $this->skipValidation && ! $this->cleanRules()->validate($data)) {
             return false;
         }
-
-        // Restore $cleanValidationRules
-        $this->cleanValidationRules = $cleanValidationRules;
 
         // Must be called first so we don't
         // strip out created_at values.
@@ -778,16 +767,12 @@ abstract class BaseModel
      * @param int        $batchSize The size of the batch to run
      * @param bool       $testing   True means only number of records is returned, false will execute the query
      *
-     * @return bool|int Number of rows inserted or FALSE on failure
-     *
      * @throws ReflectionException
+     *
+     * @return bool|int Number of rows inserted or FALSE on failure
      */
     public function insertBatch(?array $set = null, ?bool $escape = null, int $batchSize = 100, bool $testing = false)
     {
-        // Set $cleanValidationRules to false temporary.
-        $cleanValidationRules       = $this->cleanValidationRules;
-        $this->cleanValidationRules = false;
-
         if (is_array($set)) {
             foreach ($set as &$row) {
                 // If $data is using a custom class with public or protected
@@ -804,11 +789,8 @@ abstract class BaseModel
                     $row = (array) $row;
                 }
 
-                // Validate every row.
-                if (! $this->skipValidation && ! $this->validate($row)) {
-                    // Restore $cleanValidationRules
-                    $this->cleanValidationRules = $cleanValidationRules;
-
+                // Validate every row..
+                if (! $this->skipValidation && ! $this->cleanRules()->validate($row)) {
                     return false;
                 }
 
@@ -828,9 +810,6 @@ abstract class BaseModel
                 }
             }
         }
-
-        // Restore $cleanValidationRules
-        $this->cleanValidationRules = $cleanValidationRules;
 
         return $this->doInsertBatch($set, $escape, $batchSize, $testing);
     }
@@ -853,7 +832,7 @@ abstract class BaseModel
         $data = $this->transformDataToArray($data, 'update');
 
         // Validate data before saving.
-        if (! $this->skipValidation && ! $this->validate($data)) {
+        if (! $this->skipValidation && ! $this->cleanRules(true)->validate($data)) {
             return false;
         }
 
@@ -903,10 +882,10 @@ abstract class BaseModel
      * @param int         $batchSize The size of the batch to run
      * @param bool        $returnSQL True means SQL is returned, false will execute the query
      *
-     * @return mixed Number of rows affected or FALSE on failure
-     *
      * @throws DatabaseException
      * @throws ReflectionException
+     *
+     * @return mixed Number of rows affected or FALSE on failure
      */
     public function updateBatch(?array $set = null, ?string $index = null, int $batchSize = 100, bool $returnSQL = false)
     {
@@ -927,7 +906,7 @@ abstract class BaseModel
                 }
 
                 // Validate data before saving.
-                if (! $this->skipValidation && ! $this->validate($row)) {
+                if (! $this->skipValidation && ! $this->cleanRules(true)->validate($row)) {
                     return false;
                 }
 
@@ -958,9 +937,9 @@ abstract class BaseModel
      * @param array|int|string|null $id    The rows primary key(s)
      * @param bool                  $purge Allows overriding the soft deletes setting.
      *
-     * @return BaseResult|bool
-     *
      * @throws DatabaseException
+     *
+     * @return BaseResult|bool
      */
     public function delete($id = null, bool $purge = false)
     {
@@ -1048,7 +1027,7 @@ abstract class BaseModel
     public function replace(?array $data = null, bool $returnSQL = false)
     {
         // Validate data before saving.
-        if ($data && ! $this->skipValidation && ! $this->validate($data)) {
+        if ($data && ! $this->skipValidation && ! $this->cleanRules(true)->validate($data)) {
             return false;
         }
 
@@ -1174,9 +1153,9 @@ abstract class BaseModel
      *
      * @param int|null $userData An optional PHP timestamp to be converted.
      *
-     * @return mixed
-     *
      * @throws ModelException
+     *
+     * @return mixed
      */
     protected function setDate(?int $userData = null)
     {
@@ -1198,9 +1177,9 @@ abstract class BaseModel
      *
      * @param int $value value
      *
-     * @return int|string
-     *
      * @throws ModelException
+     *
+     * @return int|string
      */
     protected function intToDate(int $value)
     {
@@ -1461,9 +1440,9 @@ abstract class BaseModel
      * @param string $event     Event
      * @param array  $eventData Event Data
      *
-     * @return mixed
-     *
      * @throws DataException
+     *
+     * @return mixed
      */
     protected function trigger(string $event, array $eventData)
     {
@@ -1522,9 +1501,9 @@ abstract class BaseModel
      * @param bool          $onlyChanged Only Changed Property
      * @param bool          $recursive   If true, inner entities will be casted as array as well
      *
-     * @return array Array
-     *
      * @throws ReflectionException
+     *
+     * @return array Array
      */
     protected function objectToArray($data, bool $onlyChanged = true, bool $recursive = false): array
     {
@@ -1552,9 +1531,9 @@ abstract class BaseModel
      * @param bool          $onlyChanged Only Changed Property
      * @param bool          $recursive   If true, inner entities will be casted as array as well
      *
-     * @return array|null Array
-     *
      * @throws ReflectionException
+     *
+     * @return array|null Array
      */
     protected function objectToRawArray($data, bool $onlyChanged = true, bool $recursive = false): ?array
     {
@@ -1602,11 +1581,7 @@ abstract class BaseModel
         // properties representing the collection elements, we need to grab
         // them as an array.
         if (is_object($data) && ! $data instanceof stdClass) {
-            // If it validates with entire rules, all fields are needed.
-            $onlyChanged = ($this->skipValidation === false && $this->cleanValidationRules === false)
-                ? false : ($type === 'update');
-
-            $data = $this->objectToArray($data, $onlyChanged, true);
+            $data = $this->objectToArray($data, ($type === 'update'), true);
         }
 
         // If it's still a stdClass, go ahead and convert to

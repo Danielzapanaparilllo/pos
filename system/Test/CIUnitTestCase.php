@@ -134,7 +134,6 @@ abstract class CIUnitTestCase extends TestCase
      * If not present, will use the defaultGroup.
      *
      * @var string
-     * @phpstan-var non-empty-string
      */
     protected $DBGroup = 'tests';
 
@@ -148,7 +147,7 @@ abstract class CIUnitTestCase extends TestCase
     /**
      * Migration Runner instance.
      *
-     * @var MigrationRunner|null
+     * @var MigrationRunner|mixed
      */
     protected $migrations;
 
@@ -349,9 +348,9 @@ abstract class CIUnitTestCase extends TestCase
      *
      * @param string|null $expectedMessage
      *
-     * @return bool
-     *
      * @throws Exception
+     *
+     * @return bool
      */
     public function assertLogged(string $level, $expectedMessage = null)
     {
@@ -392,31 +391,60 @@ abstract class CIUnitTestCase extends TestCase
     }
 
     /**
-     * Hooks into xdebug's headers capture, looking for presence of
-     * a specific header emitted.
+     * Hooks into xdebug's headers capture, looking for a specific header
+     * emitted
      *
      * @param string $header The leading portion of the header we are looking for
+     *
+     * @throws Exception
      */
     public function assertHeaderEmitted(string $header, bool $ignoreCase = false): void
     {
-        $this->assertNotNull(
-            $this->getHeaderEmitted($header, $ignoreCase, __METHOD__),
-            "Didn't find header for {$header}"
-        );
+        $found = false;
+
+        if (! function_exists('xdebug_get_headers')) {
+            $this->markTestSkipped('XDebug not found.');
+        }
+
+        foreach (xdebug_get_headers() as $emitted) {
+            $found = $ignoreCase ?
+                    (stripos($emitted, $header) === 0) :
+                    (strpos($emitted, $header) === 0);
+            if ($found) {
+                break;
+            }
+        }
+
+        $this->assertTrue($found, "Didn't find header for {$header}");
     }
 
     /**
-     * Hooks into xdebug's headers capture, looking for absence of
-     * a specific header emitted.
+     * Hooks into xdebug's headers capture, looking for a specific header
+     * emitted
      *
      * @param string $header The leading portion of the header we don't want to find
+     *
+     * @throws Exception
      */
     public function assertHeaderNotEmitted(string $header, bool $ignoreCase = false): void
     {
-        $this->assertNull(
-            $this->getHeaderEmitted($header, $ignoreCase, __METHOD__),
-            "Found header for {$header}"
-        );
+        $found = false;
+
+        if (! function_exists('xdebug_get_headers')) {
+            $this->markTestSkipped('XDebug not found.');
+        }
+
+        foreach (xdebug_get_headers() as $emitted) {
+            $found = $ignoreCase ?
+                    (stripos($emitted, $header) === 0) :
+                    (strpos($emitted, $header) === 0);
+            if ($found) {
+                break;
+            }
+        }
+
+        $success = ! $found;
+        $this->assertTrue($success, "Found header for {$header}");
     }
 
     /**
@@ -445,9 +473,9 @@ abstract class CIUnitTestCase extends TestCase
      * @param mixed $expected
      * @param mixed $actual
      *
-     * @return bool|void
-     *
      * @throws Exception
+     *
+     * @return bool|void
      */
     public function assertCloseEnoughString($expected, $actual, string $message = '', int $tolerance = 1)
     {
@@ -491,20 +519,23 @@ abstract class CIUnitTestCase extends TestCase
 
     /**
      * Return first matching emitted header.
+     *
+     * @param string $header Identifier of the header of interest
+     *
+     * @return string|null The value of the header found, null if not found
      */
-    protected function getHeaderEmitted(string $header, bool $ignoreCase = false, string $method = __METHOD__): ?string
+    protected function getHeaderEmitted(string $header, bool $ignoreCase = false): ?string
     {
         if (! function_exists('xdebug_get_headers')) {
-            $this->markTestSkipped($method . '() requires xdebug.');
+            $this->markTestSkipped('XDebug not found.');
         }
 
-        foreach (xdebug_get_headers() as $emittedHeader) {
-            $found = $ignoreCase
-                ? (stripos($emittedHeader, $header) === 0)
-                : (strpos($emittedHeader, $header) === 0);
-
+        foreach (xdebug_get_headers() as $emitted) {
+            $found = $ignoreCase ?
+                    (stripos($emitted, $header) === 0) :
+                    (strpos($emitted, $header) === 0);
             if ($found) {
-                return $emittedHeader;
+                return $emitted;
             }
         }
 

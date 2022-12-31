@@ -270,7 +270,7 @@
 
                 <?php endif; ?>
 
-                <?php $headers = $request->headers(); ?>
+                <?php $headers = $request->getHeaders(); ?>
                 <?php if (! empty($headers)) : ?>
 
                     <h3>Headers</h3>
@@ -318,7 +318,7 @@
                     </tr>
                 </table>
 
-                <?php $headers = $response->headers(); ?>
+                <?php $headers = $response->getHeaders(); ?>
                 <?php if (! empty($headers)) : ?>
                     <?php natsort($headers) ?>
 

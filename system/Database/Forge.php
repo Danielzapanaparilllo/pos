@@ -397,9 +397,9 @@ class Forge
      * @param string|string[] $fieldName
      * @param string|string[] $tableField
      *
-     * @return Forge
-     *
      * @throws DatabaseException
+     *
+     * @return Forge
      */
     public function addForeignKey($fieldName = '', string $tableName = '', $tableField = '', string $onUpdate = '', string $onDelete = '')
     {
@@ -433,9 +433,9 @@ class Forge
     /**
      * Drop Key
      *
-     * @return bool
-     *
      * @throws DatabaseException
+     *
+     * @return bool
      */
     public function dropKey(string $table, string $keyName)
     {
@@ -457,9 +457,9 @@ class Forge
     }
 
     /**
-     * @return BaseResult|bool|false|mixed|Query
-     *
      * @throws DatabaseException
+     *
+     * @return BaseResult|bool|false|mixed|Query
      */
     public function dropForeignKey(string $table, string $foreignName)
     {
@@ -481,9 +481,9 @@ class Forge
     }
 
     /**
-     * @return mixed
-     *
      * @throws DatabaseException
+     *
+     * @return mixed
      */
     public function createTable(string $table, bool $ifNotExists = false, array $attributes = [])
     {
@@ -573,9 +573,9 @@ class Forge
     }
 
     /**
-     * @return mixed
-     *
      * @throws DatabaseException
+     *
+     * @return mixed
      */
     public function dropTable(string $tableName, bool $ifExists = false, bool $cascade = false)
     {
@@ -639,9 +639,9 @@ class Forge
     }
 
     /**
-     * @return mixed
-     *
      * @throws DatabaseException
+     *
+     * @return mixed
      */
     public function renameTable(string $tableName, string $newTableName)
     {
@@ -716,9 +716,9 @@ class Forge
     /**
      * @param array|string $columnName
      *
-     * @return mixed
-     *
      * @throws DatabaseException
+     *
+     * @return mixed
      */
     public function dropColumn(string $table, $columnName)
     {

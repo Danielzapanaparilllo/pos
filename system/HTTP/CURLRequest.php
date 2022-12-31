@@ -474,7 +474,7 @@ class CURLRequest extends Request
                 }
 
                 if (isset($matches[2])) {
-                    $this->response->setStatusCode((int) $matches[2], $matches[3] ?? null);
+                    $this->response->setStatusCode($matches[2], $matches[3] ?? null);
                 }
             }
         }
@@ -483,9 +483,9 @@ class CURLRequest extends Request
     /**
      * Set CURL options
      *
-     * @return array
-     *
      * @throws InvalidArgumentException
+     *
+     * @return array
      */
     protected function setCURLOptions(array $curlOptions = [], array $config = [])
     {

@@ -90,9 +90,9 @@ class Result extends BaseResult
      * internally before fetching results to make sure the result set
      * starts at zero.
      *
-     * @return mixed
-     *
      * @throws DatabaseException
+     *
+     * @return mixed
      */
     public function dataSeek(int $n = 0)
     {

@@ -46,9 +46,9 @@ class RedirectResponse extends Response
      *
      * @param string $route Named route or Controller::method
      *
-     * @return $this
-     *
      * @throws HTTPException
+     *
+     * @return $this
      */
     public function route(string $route, array $params = [], int $code = 302, string $method = 'auto')
     {

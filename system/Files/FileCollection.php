@@ -352,9 +352,9 @@ class FileCollection implements Countable, IteratorAggregate
      * Yields as an Iterator for the current files.
      * Fulfills IteratorAggregate.
      *
-     * @return Generator<File>
-     *
      * @throws FileNotFoundException
+     *
+     * @return Generator<File>
      */
     public function getIterator(): Generator
     {

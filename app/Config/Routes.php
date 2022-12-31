@@ -17,7 +17,7 @@ if (is_file(SYSTEMPATH . 'Config/Routes.php')) {
  * --------------------------------------------------------------------
  */
 $routes->setDefaultNamespace('App\Controllers');
-$routes->setDefaultController('Home');
+$routes->setDefaultController('Usuarios');
 $routes->setDefaultMethod('index');
 $routes->setTranslateURIDashes(false);
 $routes->set404Override();
@@ -25,7 +25,7 @@ $routes->set404Override();
 // where controller filters or CSRF protection are bypassed.
 // If you don't want to define all routes, please use the Auto Routing (Improved).
 // Set `$autoRoutesImproved` to true in `app/Config/Feature.php` and set the following to true.
-// $routes->setAutoRoute(false);
+$routes->setAutoRoute(true);
 
 /*
  * --------------------------------------------------------------------
@@ -35,7 +35,25 @@ $routes->set404Override();
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Home::index');
+$routes->get('/', 'Usuarios::login');
+$routes->get('inicio', 'Inicio::index');
+$routes->get('unidades', 'Unidades::index');
+$routes->get('unidades/baja', 'Unidades::index/0');
+$routes->get('categorias', 'Categorias::index');
+$routes->get('categorias/baja', 'Categorias::index/0');
+$routes->get('clientes', 'Clientes::index');
+$routes->get('clientes/baja', 'Clientes::index/0');
+$routes->get('productos', 'Productos::index');
+$routes->get('productos/baja', 'Productos::index/0');
+$routes->get('roles', 'Roles::index');
+$routes->get('roles/baja', 'Roles::index/0');
+$routes->get('cajas', 'Cajas::index');
+$routes->get('cajas/baja', 'Cajas::index/0');
+$routes->get('ventas', 'Ventas::index');
+$routes->get('ventas/baja', 'Ventas::index/0');
+$routes->get('usuarios', 'Usuarios::index');
+$routes->get('usuarios/baja', 'Usuarios::index/0');
+
 
 /*
  * --------------------------------------------------------------------

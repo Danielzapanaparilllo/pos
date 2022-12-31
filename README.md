@@ -1,56 +1,53 @@
-# CodeIgniter 4 Framework
+# Punto de Venta CDP 3.0
 
-## What is CodeIgniter?
+El sistema de punto de venta CDP 3 es una aplicación web basada en el lenguaje PHP y MySQL con la cual puedes mantener el control de inventario y venta de productos en una tienda.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](http://codeigniter.com).
+El sistema cuenta con un catálogo de productos, caja, ventas realizadas, inventario, clientes y reportes.
 
-This repository holds the distributable version of the framework,
-including the user guide. It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+Con una interfaz adaptable que hace la administración del sistema más eficiente y permite la navegación móvil (diseño responsivo).
 
-More information about the plans for version 4 can be found in [the announcement](http://forum.codeigniter.com/thread-62615.html) on the forums.
+## Requisitos
 
-The user guide corresponding to this version of the framework can be found
-[here](https://codeigniter4.github.io/userguide/).
+* Servidor web (Apache Server 2.4 o superior).
+* PHP 7.4 o superior.
+* MySQL 5.6 o superior.
+* Extensiones de PHP
+  * [intl](http://php.net/manual/es/intl.requirements.php)
+  * [gd](https://php.net/manual/es/image.requirements.php)
+  * [mbstring](http://php.net/manual/es/mbstring.installation.php)
 
+_**Nota**: Se puede ejecutar en paquetes binarios como XAMPP, WampServer, Mamp Server, LAMP entre otros._
 
-## Important Change with index.php
+## Dependencias utilizadas
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+* [PHP](https://www.php.net)
+* [CodeIgniter 4.2.6](https://codeigniter.com)
+* [MySQL](https://www.mysql.com/)
+* [SB Admin v6.0.3](https://github.com/StartBootstrap/startbootstrap-sb-admin/tree/v6.0.3)
+* [Bootstrap v4.6](https://getbootstrap.com/docs/4.6/getting-started/introduction)
+* [jQuery v3.6.0](https://jquery.com)
+* [DataTables 1.10.23](https://www.datatables.net)
+* [FPDF 1.84](http://www.fpdf.org)
+* [Sweetalert2](https://sweetalert2.github.io)
+* [Font Awesome 5.15.3](https://fontawesome.com)
+* [Chart.js v3.5.0](https://www.chartjs.org)
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+## Características versión 3.0
 
-**Please** read the user guide for a better explanation of how CI4 works!
-
-## Repository Management
-
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
-
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
-
-## Contributing
-
-We welcome contributions from the community.
-
-Please read the [*Contributing to CodeIgniter*](https://github.com/codeigniter4/CodeIgniter4/blob/develop/CONTRIBUTING.md) section in the development repository.
-
-## Server Requirements
-
-PHP version 7.4 or higher is required, with the following extensions installed:
-
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
-
-Additionally, make sure that the following extensions are enabled in your PHP:
-
-- json (enabled by default - don't turn it off)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php)
-- xml (enabled by default - don't turn it off)
+* Acceso por credenciales
+* Catalogo de productos, categorías y unidades de medida
+* Catalogo de clientes
+* Modulo de movimientos de inventario
+* Caja de cobro
+* Generación de ticket
+* Historial de ventas
+* Reportes
+  * Ventas
+  * Productos
+  * Kardex
+  * Productos mínimos de stock
+* Administración de usuarios y roles
+* Configuración del sistema
+* Administración de cajas
+* Historial de logs de acceso
+* Privilegios de usuarios

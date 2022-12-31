@@ -138,10 +138,10 @@ trait FeatureTestTrait
      * Calls a single URI, executes it, and returns a TestResponse
      * instance that can be used to run many assertions against.
      *
-     * @return TestResponse
-     *
      * @throws RedirectException
      * @throws Exception
+     *
+     * @return TestResponse
      */
     public function call(string $method, string $path, ?array $params = null)
     {
@@ -149,9 +149,11 @@ trait FeatureTestTrait
 
         // Clean up any open output buffers
         // not relevant to unit testing
+        // @codeCoverageIgnoreStart
         if (\ob_get_level() > 0 && (! isset($this->clean) || $this->clean === true)) {
-            \ob_end_clean(); // @codeCoverageIgnore
+            \ob_end_clean();
         }
+        // @codeCoverageIgnoreEnd
 
         // Simulate having a blank session
         $_SESSION                  = [];
@@ -195,13 +197,15 @@ trait FeatureTestTrait
         Services::router()->setDirectory(null);
 
         // Ensure the output buffer is identical so no tests are risky
+        // @codeCoverageIgnoreStart
         while (\ob_get_level() > $buffer) {
-            \ob_end_clean(); // @codeCoverageIgnore
+            \ob_end_clean();
         }
 
         while (\ob_get_level() < $buffer) {
-            \ob_start(); // @codeCoverageIgnore
+            \ob_start();
         }
+        // @codeCoverageIgnoreEnd
 
         return new TestResponse($response);
     }
@@ -209,10 +213,10 @@ trait FeatureTestTrait
     /**
      * Performs a GET request.
      *
-     * @return TestResponse
-     *
      * @throws RedirectException
      * @throws Exception
+     *
+     * @return TestResponse
      */
     public function get(string $path, ?array $params = null)
     {
@@ -222,10 +226,10 @@ trait FeatureTestTrait
     /**
      * Performs a POST request.
      *
-     * @return TestResponse
-     *
      * @throws RedirectException
      * @throws Exception
+     *
+     * @return TestResponse
      */
     public function post(string $path, ?array $params = null)
     {
@@ -235,10 +239,10 @@ trait FeatureTestTrait
     /**
      * Performs a PUT request
      *
-     * @return TestResponse
-     *
      * @throws RedirectException
      * @throws Exception
+     *
+     * @return TestResponse
      */
     public function put(string $path, ?array $params = null)
     {
@@ -248,10 +252,10 @@ trait FeatureTestTrait
     /**
      * Performss a PATCH request
      *
-     * @return TestResponse
-     *
      * @throws RedirectException
      * @throws Exception
+     *
+     * @return TestResponse
      */
     public function patch(string $path, ?array $params = null)
     {
@@ -261,10 +265,10 @@ trait FeatureTestTrait
     /**
      * Performs a DELETE request.
      *
-     * @return TestResponse
-     *
      * @throws RedirectException
      * @throws Exception
+     *
+     * @return TestResponse
      */
     public function delete(string $path, ?array $params = null)
     {
@@ -274,10 +278,10 @@ trait FeatureTestTrait
     /**
      * Performs an OPTIONS request.
      *
-     * @return TestResponse
-     *
      * @throws RedirectException
      * @throws Exception
+     *
+     * @return TestResponse
      */
     public function options(string $path, ?array $params = null)
     {
@@ -331,9 +335,9 @@ trait FeatureTestTrait
      *
      * Always populate the GET vars based on the URI.
      *
-     * @return Request
-     *
      * @throws ReflectionException
+     *
+     * @return Request
      */
     protected function populateGlobals(string $method, Request $request, ?array $params = null)
     {

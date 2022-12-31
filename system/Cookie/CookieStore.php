@@ -36,9 +36,9 @@ class CookieStore implements Countable, IteratorAggregate
      *
      * @param string[] $headers
      *
-     * @return static
-     *
      * @throws CookieException
+     *
+     * @return static
      */
     public static function fromCookieHeaders(array $headers, bool $raw = false)
     {

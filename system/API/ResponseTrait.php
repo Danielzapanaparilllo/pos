@@ -143,7 +143,7 @@ trait ResponseTrait
     /**
      * Used after successfully creating a new resource.
      *
-     * @param array|string|null $data
+     * @param mixed $data
      *
      * @return Response
      */
@@ -155,7 +155,7 @@ trait ResponseTrait
     /**
      * Used after a resource has been successfully deleted.
      *
-     * @param array|string|null $data
+     * @param mixed $data
      *
      * @return Response
      */
@@ -167,7 +167,7 @@ trait ResponseTrait
     /**
      * Used after a resource has been successfully updated.
      *
-     * @param array|string|null $data
+     * @param mixed $data
      *
      * @return Response
      */

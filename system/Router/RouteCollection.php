@@ -110,7 +110,7 @@ class RouteCollection implements RouteCollectionInterface
      *     verb => [
      *         routeName => [
      *             'route' => [
-     *                 routeKey(or from) => handler,
+     *                 routeKey => handler,
      *             ]
      *         ]
      *     ],
@@ -133,14 +133,6 @@ class RouteCollection implements RouteCollectionInterface
      * Array of routes options
      *
      * @var array
-     *
-     * [
-     *     verb => [
-     *         routeKey(or from) => [
-     *             key => value,
-     *         ]
-     *     ],
-     * ]
      */
     protected $routesOptions = [];
 
@@ -1247,15 +1239,12 @@ class RouteCollection implements RouteCollectionInterface
 
         $name = $options['as'] ?? $from;
 
-        helper('array');
-
         // Don't overwrite any existing 'froms' so that auto-discovered routes
         // do not overwrite any app/Config/Routes settings. The app
         // routes should always be the "source of truth".
         // this works only because discovered routes are added just prior
         // to attempting to route the request.
-        $fromExists = dot_array_search('*.route.' . $from, $this->routes[$verb] ?? []) !== null;
-        if ((isset($this->routes[$verb][$name]) || $fromExists) && ! $overwrite) {
+        if (isset($this->routes[$verb][$name]) && ! $overwrite) {
             return;
         }
 

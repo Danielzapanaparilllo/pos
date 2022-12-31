@@ -145,9 +145,9 @@ trait ControllerTestTrait
      *
      * @param array $params
      *
-     * @return TestResponse
-     *
      * @throws InvalidArgumentException
+     *
+     * @return TestResponse
      */
     public function execute(string $method, ...$params)
     {

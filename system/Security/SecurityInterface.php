@@ -22,9 +22,9 @@ interface SecurityInterface
     /**
      * CSRF Verify
      *
-     * @return $this|false
-     *
      * @throws SecurityException
+     *
+     * @return $this|false
      */
     public function verify(RequestInterface $request);
 

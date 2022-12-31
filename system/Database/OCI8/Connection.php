@@ -12,6 +12,7 @@
 namespace CodeIgniter\Database\OCI8;
 
 use CodeIgniter\Database\BaseConnection;
+use CodeIgniter\Database\ConnectionInterface;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 use CodeIgniter\Database\Query;
 use ErrorException;
@@ -20,7 +21,7 @@ use stdClass;
 /**
  * Connection for OCI8
  */
-class Connection extends BaseConnection
+class Connection extends BaseConnection implements ConnectionInterface
 {
     /**
      * Database driver
@@ -279,9 +280,9 @@ class Connection extends BaseConnection
     /**
      * Returns an array of objects with field data
      *
-     * @return stdClass[]
-     *
      * @throws DatabaseException
+     *
+     * @return stdClass[]
      */
     protected function _fieldData(string $table): array
     {
@@ -327,9 +328,9 @@ class Connection extends BaseConnection
     /**
      * Returns an array of objects with index data
      *
-     * @return stdClass[]
-     *
      * @throws DatabaseException
+     *
+     * @return stdClass[]
      */
     protected function _indexData(string $table): array
     {
@@ -376,9 +377,9 @@ class Connection extends BaseConnection
     /**
      * Returns an array of objects with Foreign key data
      *
-     * @return stdClass[]
-     *
      * @throws DatabaseException
+     *
+     * @return stdClass[]
      */
     protected function _foreignKeyData(string $table): array
     {
